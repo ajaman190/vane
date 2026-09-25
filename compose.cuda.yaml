@@ -1,0 +1,17 @@
+# NVIDIA GPU override for the CPU base image in compose.yaml.
+# Usage: docker compose -f compose.yaml -f compose.cuda.yaml up --build
+#
+# Install a CUDA build of torch inside the image (or a custom Dockerfile)
+# before expecting GPU inference. This override only exposes the device.
+
+services:
+  vane:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all

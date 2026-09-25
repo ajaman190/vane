@@ -1,0 +1,67 @@
+extends: base
+
+model:
+  name: vane-1.0.0-vision
+  modality: vision
+  profile: match
+  match:
+    d_model: 768
+    n_blocks: 2
+    n_heads: 12
+    d_ff: 3072
+    vocab_size: 256
+    window_size: 128
+    max_context: 8192
+  backbone:
+    repo: jhu-clsp/mmBERT-base
+    frozen: true
+    load: true
+    dim: 768
+  backbone_dim: 768
+  n_refine: 2
+  vision:
+    repo: google/siglip2-base-patch16-224
+    frozen: true
+    load: true
+    proj_dim: 768
+
+training:
+  epochs: 1
+  max_steps: null
+  batch_size: 4
+  lr: 0.0001
+  max_seq_len: 8192
+  checkpoint_every: 200
+  device: cuda
+
+data:
+  max_examples_per_corpus: null
+  calibration_size: 1024
+  calibration_fraction: 0.02
+  tokenizer: backbone
+  corpora:
+    - AmazonScience/massive
+    - clinc_oos
+    - Tobi-Bueck/customer-support-tickets
+    - PolyAI/banking77
+    - google/boolq
+    - nyu-mll/multi_nli
+    - xnli
+    - facebook/anli
+    - fever
+    - google-research-datasets/go_emotions
+    - google/civil_comments
+    - deepset/prompt-injections
+    - lmsys/toxic-chat
+    - zefang-liu/phishing-email-dataset
+    - SetFit/enron_spam
+    - nvidia/HelpSteer2
+    - SetFit/sst5
+    - microsoft/ms_marco
+    - pfb30/multi_woz_2_2
+    - FUNSD
+    - DocVQA
+    - Rico
+
+checkpoint:
+  dir: checkpoints/vane-vision-1.0.0

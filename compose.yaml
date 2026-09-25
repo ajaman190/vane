@@ -1,0 +1,8 @@
+services:
+  vane:
+    build: .
+    ports:
+      - "8000:8000"
+    # Mount a checkpoint directory at runtime if you have weights.
+    # volumes:
+    #   - ./checkpoints:/app/checkpoints:ro

@@ -1,0 +1,71 @@
+# Shared defaults. Run files in this directory extend it.
+
+model:
+  window_size: 128
+  max_context: 32768
+  max_levels: 10
+  dropout: 0.0
+  tau_choice: 0.95
+  tau_score: 0.95
+  # dev: laptop / tests. full: design-size tower. The trainer loads `profile`.
+  profile: dev
+  backbone:
+    # Multilingual encoder the full tower is meant to start from.
+    # load: false keeps the run on the profile dims and does not download weights.
+    repo: jhu-clsp/mmBERT-base
+    frozen: true
+    load: false
+  dev:
+    d_model: 64
+    n_blocks: 2
+    n_heads: 4
+    d_ff: 128
+    vocab_size: 256
+  full:
+    d_model: 768
+    n_blocks: 22
+    n_heads: 12
+    d_ff: 3072
+    vocab_size: 256000
+    window_size: 128
+    max_context: 32768
+
+training:
+  seed: 0
+  device: cuda
+  lr: 0.0001
+  weight_decay: 0.01
+  batch_size: 8
+  epochs: 1
+  max_steps: null
+  max_seq_len: 8192
+  gradient_clip: 1.0
+  checkpoint_every: 4
+  eval_every: 4
+  early_exit_train_prob: 0.25
+  loss:
+    noul_weight: 1.0
+    choice_weight: 1.0
+    score_weight: 1.0
+    score_rps_beta: 1.0
+    score_entropy_gamma: 0.01
+
+data:
+  max_examples_per_corpus: null
+  development_fraction: 0.02
+  calibration_fraction: 0.02
+  calibration_size: 2048
+  seed: 0
+  tokenizer: backbone
+
+calibration:
+  fit_on: calibration
+
+evaluation:
+  metrics:
+    - loss
+    - accuracy
+    - brier
+
+checkpoint:
+  dir: checkpoints/default
